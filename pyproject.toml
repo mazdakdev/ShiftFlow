@@ -1,0 +1,12 @@
+[project]
+name = "shift-management"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "crispy-tailwind>=1.0.3",
+    "django>=5.2.5",
+    "django-crispy-forms>=2.4",
+    "python-decouple>=3.8",
+]

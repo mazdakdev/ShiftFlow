@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}خوش آمدید به شیفت‌فلو{% endblock %}
+
+{% block content %}
+<div class="text-center">
+
+  <!-- Hero Section -->
+  <div class="pomodoro-gradient rounded-3xl p-12 mb-12 text-white">
+    <h1 class="text-5xl font-bold mb-6">خوش‌ آمدید</h1>
+    <p class="text-xl mb-8 opacity-90">مدیریت شیفت</p>
+
+    <div class="space-x-4">
+      {% if not user.is_authenticated %}
+      <a href="{% url 'core:register' %}" class="bg-white text-pomodoro-red px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+        شروع
+      </a>
+      <a href="{% url 'login' %}" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-pomodoro-red transition-colors">
+        ورود
+      </a>
+      {% else %}
+        {% if user.is_staff %}
+        <a href="{% url 'admin_dashboard:dashboard' %}" class="bg-white text-pomodoro-red px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+          داشبورد ادمین
+        </a>
+        {% else %}
+        <a href="{% url 'core:employee_dashboard' %}" class="bg-white text-pomodoro-red px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+          داشبورد من
+        </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="grid md:grid-cols-3 gap-8 mb-12">
+    <!-- Feature 1 -->
+    <div class="text-center p-6">
+      <div class="bg-pomodoro-red w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">تست تست تست</h3>
+      <p class="text-gray-600">متن تست نمایشی لورم اپیسوم بلا بلا بلا تست تست تست</p>
+    </div>
+
+    <!-- Feature 2 -->
+    <div class="text-center p-6">
+      <div class="bg-pomodoro-blue w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+          </path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">پرتال کارمندان</h3>
+      <p class="text-gray-600">تست تست تست</p>
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="text-center p-6">
+      <div class="bg-pomodoro-green w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+          </path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">تحلیل و گزارش‌ها</h3>
+      <p class="text-gray-600">پیگیری ساعات کاری و تولید گزارش‌های جامع</p>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="bg-gray-100 rounded-2xl p-8">
+    <h2 class="text-3xl font-bold mb-4">برای مدیریت ساده‌تر شیفت‌ها آماده‌اید؟</h2>
+    <p class="text-gray-600 mb-6">به کسب‌وکارهایی بپیوندید که با شیفت‌فلو نیروی کار خود را کارآمدتر مدیریت می‌کنند.</p>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'core:register' %}" class="bg-pomodoro-red text-white px-8 py-3 rounded-full font-semibold hover:bg-red-700 transition-colors">
+      شروع استفاده
+    </a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}شیفت‌فلو{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "pomodoro-red": "#ba4949",
+              "pomodoro-blue": "#38858a",
+              "pomodoro-green": "#4c9195",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .pomodoro-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .shift-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-pomodoro-red">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="{% url 'core:home' %}" class="flex-shrink-0">
+              <h1 class="text-2xl font-bold text-pomodoro-red">ShiftFlow</h1>
+            </a>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            {% if user.is_authenticated %}
+              {% if user.is_staff %}
+              <a href="{% url 'admin_dashboard:dashboard' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
+                داشبورد ادمین
+              </a>
+              {% else %}
+              <a href="{% url 'core:employee_dashboard' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
+                داشبورد من
+              </a>
+              {% endif %}
+              <a href="{% url 'logout' %}" class="bg-pomodoro-red text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">
+                خروج
+              </a>
+            {% else %}
+              <a href="{% url 'login' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
+                ورود
+              </a>
+              <a href="{% url 'core:register' %}" class="bg-pomodoro-red text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">
+                ثبت‌نام
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+      {% for message in messages %}
+      <div class="mb-4 p-4 rounded-md shadow-sm {% if message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% elif message.tags == 'warning' %}bg-yellow-100 border border-yellow-400 text-yellow-700{% elif message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-blue-100 border border-blue-400 text-blue-700{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+        <p class="text-sm opacity-80">© 2025 شیفت‌فلو. همه حقوق محفوظ است.</p>
+      </div>
+    </footer>
+  </body>
+</html>

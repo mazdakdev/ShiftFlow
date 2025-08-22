@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{% if object %}ویرایش کارمند{% else %}افزودن کارمند{% endif %} - داشبورد مدیر
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+      {% if object %}ویرایش کارمند{% else %}افزودن کارمند جدید{% endif %}
+    </h1>
+    <p class="text-lg text-gray-600">
+      {% if object %}ویرایش اطلاعات کارمند{% else %}ثبت اطلاعات کارمند جدید{% endif %}
+    </p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-8">
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>{{ form.name|as_crispy_field }}</div>
+        <div>{{ form.email|as_crispy_field }}</div>
+      </div>
+
+      <div>{{ form.working_hours|as_crispy_field }}</div>
+
+      <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+        <a href="{% url 'admin_dashboard:employee_list' %}"
+          class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+          بازگشت
+        </a>
+        <button type="submit"
+          class="bg-pomodoro-red text-white px-8 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium">
+          {% if object %}به‌روزرسانی کارمند{% else %}ثبت کارمند{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+افزودن کارمند - داشبورد مدیر
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">افزودن کارمند جدید</h1>
+    <p class="text-lg text-gray-600">کارمند موردنظر را تنها در یک مرحله اضافه کنید</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-8">
+    <form method="post" class="space-y-8">
+      {% csrf_token %}
+
+      <div class="border-b border-gray-200 pb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">حساب کاربری</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>{{ user_form.username|as_crispy_field }}</div>
+          <div>{{ user_form.email|as_crispy_field }}</div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>{{ user_form.password1|as_crispy_field }}</div>
+          <div>{{ user_form.password2|as_crispy_field }}</div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">پروفایل کارمند</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>{{ employee_form.name|as_crispy_field }}</div>
+          <div>{{ employee_form.email|as_crispy_field }}</div>
+        </div>
+        <div>{{ employee_form.working_hours|as_crispy_field }}</div>
+      </div>
+
+      <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+        <a
+          href="{% url 'admin_dashboard:employee_list' %}"
+          class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+        >
+          بازگشت
+        </a>
+        <button
+          type="submit"
+          class="bg-pomodoro-red text-white px-8 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
+        >
+          ثبت کارمند
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}به‌روزرسانی پروفایل - شیفت‌فلو{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <!-- Header -->
+  <div class="mb-8 text-center">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">به‌روزرسانی پروفایل</h1>
+    <p class="text-lg text-gray-600">اطلاعات خود را به‌روز نگه دارید</p>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white rounded-2xl shadow-lg p-8">
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Grid Fields -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>{{ form.name|as_crispy_field }}</div>
+        <div>{{ form.email|as_crispy_field }}</div>
+      </div>
+
+      <div>{{ form.working_hours|as_crispy_field }}</div>
+
+      <!-- Form Actions -->
+      <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+        <a href="{% url 'core:employee_dashboard' %}"
+           class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+          انصراف
+        </a>
+        <button type="submit"
+                class="bg-pomodoro-red text-white px-8 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium">
+          به‌روزرسانی پروفایل
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
