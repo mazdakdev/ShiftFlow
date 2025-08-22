@@ -43,17 +43,21 @@
           <div class="flex items-center space-x-4">
             {% if user.is_authenticated %}
               {% if user.is_staff %}
-              <a href="{% url 'admin_dashboard:dashboard' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
-                داشبورد ادمین
-              </a>
-              {% else %}
-              <a href="{% url 'core:employee_dashboard' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
-                داشبورد من
-              </a>
-              {% endif %}
-              <a href="{% url 'logout' %}" class="bg-pomodoro-red text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">
-                خروج
-              </a>
+                <a href="{% url 'admin_dashboard:dashboard' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
+                  داشبورد ادمین
+                </a>
+                {% else %}
+                <a href="{% url 'core:employee_dashboard' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
+                  داشبورد من
+                </a>
+                {% endif %}
+    
+              <form action="{% url 'logout' %}" method="post" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="bg-pomodoro-red text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700">
+                  خروج
+                </button>
+              </form>
             {% else %}
               <a href="{% url 'login' %}" class="text-gray-700 hover:text-pomodoro-red px-3 py-2 rounded-md text-sm font-medium">
                 ورود
@@ -62,6 +66,7 @@
                 ثبت‌نام
               </a>
             {% endif %}
+            
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.utils import timezone
 from .models import Employee
+from django.contrib.auth import logout
 from admin_dashboard.forms import UserRegistrationForm
 from admin_dashboard.forms import EmployeeForm
 
@@ -97,6 +98,12 @@ def update_employee_profile(request):
     context = {'form': form, 'employee': employee}
     return render(request, 'core/update_employee_profile.html', context)
 
+@login_required
+def user_logout(request):
+    """Logout view"""
+    logout(request)
+    messages.success(request, 'You have been logged out successfully.')
+    return redirect('core:home')
 
 def home(request):
     """Home page view"""

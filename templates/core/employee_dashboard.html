@@ -6,7 +6,7 @@
 
   <!-- Welcome Header -->
   <div class="text-center mb-8">
-    <h1 class="text-4xl font-bold text-gray-900 mb-2">خوش آمدید, {{ employee.name }}!</h1>
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">خوش آمدید، {{ employee.name }}!</h1>
     <p class="text-lg text-gray-600">برنامه شیفتی و زمانی شما:</p>
   </div>
 
@@ -27,7 +27,7 @@
     </div>
     <div class="mt-6" id="countdown">
       <p class="text-sm opacity-75 mb-2">تا پایان شیفت:</p>
-      <div class="text-2xl font-mono font-bold" id="timer">Loading...</div>
+      <div class="text-2xl font-mono font-bold" id="timer">در حال بارگذاری...</div>
     </div>
   </div>
   {% else %}
@@ -39,24 +39,26 @@
       </svg>
     </div>
     <h2 class="text-2xl font-bold text-gray-700 mb-2">شیفتی فعال نیست</h2>
-    <p class="text-gray-600">شیفت برنامه‌ریزی شده‌ای ندارید</p>
+    <p class="text-gray-600">شیفت برنامه‌ریزی‌شده‌ای ندارید</p>
   </div>
   {% endif %}
 
   <!-- Next Shift -->
   {% if next_shift %}
   <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-    <h3 class="text-2xl font-bold text-gray-900 mb-6">Next Shift</h3>
+    <h3 class="text-2xl font-bold text-gray-900 mb-6">شیفت بعدی</h3>
     <div class="bg-gradient-to-r from-pomodoro-red to-pink-500 rounded-xl p-6 text-white">
       <div class="flex items-center justify-between">
         <div>
           <h4 class="text-xl font-semibold mb-2">{{ next_shift.name }}</h4>
-          <p class="text-lg opacity-90">{{ next_shift.start_time|date:"l, F j" }} at {{ next_shift.start_time|time:"H:i" }}</p>
-          <p class="opacity-75">Duration: {{ next_shift.duration_hours|floatformat:1 }} hours</p>
+          <p class="text-lg opacity-90">
+            {{ next_shift.start_time|date:"l, j F" }} ساعت {{ next_shift.start_time|time:"H:i" }}
+          </p>
+          <p class="opacity-75">مدت زمان: {{ next_shift.duration_hours|floatformat:1 }} ساعت</p>
         </div>
         <div class="text-right">
           <div class="text-sm opacity-75 mb-2">تا شروع شیفت:</div>
-          <div class="text-2xl font-mono font-bold" id="next-shift-timer">Loading...</div>
+          <div class="text-2xl font-mono font-bold" id="next-shift-timer">در حال بارگذاری...</div>
         </div>
       </div>
     </div>
@@ -97,7 +99,7 @@
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">عضو از</label>
-        <p class="text-lg text-gray-900">{{ employee.created_at|date:"F j, Y" }}</p>
+        <p class="text-lg text-gray-900">{{ employee.created_at|date:"j F Y" }}</p>
       </div>
     </div>
   </div>
@@ -111,18 +113,16 @@
     const timeLeft = endTime - now;
 
     if (timeLeft <= 0) {
-      document.getElementById('timer').innerHTML = 'Shift ended!';
+      document.getElementById('timer').innerHTML = 'شیفت پایان یافت';
       return;
     }
 
-    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    const hours = String(Math.floor(timeLeft / (1000 * 60 * 60))).padStart(2, '0');
+    const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+    const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
 
-    document.getElementById('timer').innerHTML =
-      `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    document.getElementById('timer').innerHTML = `${hours}:${minutes}:${seconds}`;
   }
-
   setInterval(updateCountdown, 1000);
   updateCountdown();
   {% endif %}
@@ -134,7 +134,7 @@
     const timeLeft = startTime - now;
 
     if (timeLeft <= 0) {
-      document.getElementById('next-shift-timer').innerHTML = 'Starting now!';
+      document.getElementById('next-shift-timer').innerHTML = 'در حال شروع!';
       return;
     }
 
@@ -143,13 +143,12 @@
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
     let timeString = '';
-    if (days > 0) timeString = `${days}d ${hours}h ${minutes}m`;
-    else if (hours > 0) timeString = `${hours}h ${minutes}m`;
-    else timeString = `${minutes}m`;
+    if (days > 0) timeString = `${days} روز ${hours} ساعت ${minutes} دقیقه`;
+    else if (hours > 0) timeString = `${hours} ساعت ${minutes} دقیقه`;
+    else timeString = `${minutes} دقیقه`;
 
     document.getElementById('next-shift-timer').innerHTML = timeString;
   }
-
   setInterval(updateNextShiftCountdown, 1000);
   updateNextShiftCountdown();
   {% endif %}
