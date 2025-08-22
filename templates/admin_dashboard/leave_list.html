@@ -1,0 +1,104 @@
+{% extends 'base.html' %} 
+
+{% block title %}مدیریت مرخصی‌ها - شیفت‌فلو{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">مدیریت مرخصی‌ها</h1>
+      <p class="text-gray-600">مشاهده و مدیریت درخواست‌های مرخصی کارمندان</p>
+    </div>
+    <a href="{% url 'admin_dashboard:leave_create' %}" 
+       class="bg-pomodoro-red text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
+      ایجاد مرخصی جدید
+    </a>
+  </div>
+
+  <!-- Leave List -->
+  <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">کارمند</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاریخ</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">نوع مرخصی</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">وضعیت</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">دلیل</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">عملیات</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for leave in leaves %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ leave.employee.name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ leave.date|date:"j F Y" }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ leave.get_leave_type_display }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                {% if leave.status == 'pending' %}
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">در انتظار تایید</span>
+                {% elif leave.status == 'approved' %}
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">تایید شده</span>
+                {% elif leave.status == 'rejected' %}
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">رد شده</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-900">
+                {% if leave.reason %}
+                  <div class="max-w-xs truncate" title="{{ leave.reason }}">{{ leave.reason }}</div>
+                {% else %}
+                  <span class="text-gray-400">-</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex space-x-2 space-x-reverse">
+                  {% if leave.status == 'pending' %}
+                    <a href="{% url 'admin_dashboard:leave_approve' leave.pk %}" class="text-green-600 hover:text-green-900">تایید</a>
+                    <a href="{% url 'admin_dashboard:leave_reject' leave.pk %}" class="text-red-600 hover:text-red-900">رد</a>
+                  {% endif %}
+                  <a href="{% url 'admin_dashboard:leave_update' leave.pk %}" class="text-blue-600 hover:text-blue-900">ویرایش</a>
+                  <a href="{% url 'admin_dashboard:leave_delete' leave.pk %}" class="text-red-600 hover:text-red-900">حذف</a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                <div class="text-center">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  <h3 class="mt-2 text-sm font-medium text-gray-900">هیچ مرخصی‌ای یافت نشد</h3>
+                  <p class="mt-1 text-sm text-gray-500">برای شروع، یک مرخصی جدید ایجاد کنید.</p>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+    <div class="mt-8 flex items-center justify-between">
+      <div class="text-sm text-gray-700">
+        نمایش {{ page_obj.start_index }} تا {{ page_obj.end_index }} از {{ page_obj.paginator.count }} نتیجه
+      </div>
+      <div class="flex space-x-2 space-x-reverse">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">قبلی</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">بعدی</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

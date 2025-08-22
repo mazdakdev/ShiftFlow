@@ -6,8 +6,8 @@ from django.db import transaction
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import EmployeeForm, ShiftForm, UserRegistrationForm
-from core.models import Employee, Shift
+from .forms import EmployeeForm, ShiftForm, UserRegistrationForm, LeaveForm
+from core.models import Employee, Shift, Leave
 from django.utils import timezone
 
 
@@ -17,7 +17,7 @@ def is_admin(user):
 
 @login_required
 @user_passes_test(is_admin)
-def admin_dashboard(request):
+def dashboard(request):
     """Main admin dashboard view"""
     total_employees = Employee.objects.count()
     total_shifts = Shift.objects.count()
@@ -25,6 +25,7 @@ def admin_dashboard(request):
         start_time__lte=timezone.now(),
         end_time__gte=timezone.now()
     ).count()
+    pending_leaves = Leave.objects.filter(status='pending').count()
     
     recent_employees = Employee.objects.order_by('-created_at')[:5]
     recent_shifts = Shift.objects.order_by('-created_at')[:5]
@@ -33,6 +34,7 @@ def admin_dashboard(request):
         'total_employees': total_employees,
         'total_shifts': total_shifts,
         'active_shifts': active_shifts,
+        'pending_leaves': pending_leaves,
         'recent_employees': recent_employees,
         'recent_shifts': recent_shifts,
     }
@@ -137,7 +139,58 @@ class ShiftDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user.is_staff
     
     def delete(self, request, *args, **kwargs):
-        messages.success(request, 'Shift deleted successfully!')
+        messages.success(request, 'Employee deleted successfully!')
+        return super().delete(request, *args, **kwargs)
+
+
+class LeaveListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Leave
+    template_name = 'admin_dashboard/leave_list.html'
+    context_object_name = 'leaves'
+    paginate_by = 10
+    
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class LeaveCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Leave
+    form_class = LeaveForm
+    template_name = 'admin_dashboard/leave_form.html'
+    success_url = reverse_lazy('admin_dashboard:leave_list')
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Leave created successfully!')
+        return super().form_valid(form)
+
+
+class LeaveUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Leave
+    form_class = LeaveForm
+    template_name = 'admin_dashboard/leave_form.html'
+    success_url = reverse_lazy('admin_dashboard:leave_list')
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Leave updated successfully!')
+        return super().form_valid(form)
+
+
+class LeaveDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Leave
+    template_name = 'admin_dashboard/leave_confirm_delete.html'
+    success_url = reverse_lazy('admin_dashboard:leave_list')
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Leave deleted successfully!')
         return super().delete(request, *args, **kwargs)
 
 
@@ -167,3 +220,27 @@ def create_employee_with_user(request):
         'employee_form': employee_form,
     }
     return render(request, 'admin_dashboard/create_employee_with_user.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def leave_approve(request, pk):
+    """Approve a leave"""
+    leave = get_object_or_404(Leave, pk=pk)
+    if leave.status == 'pending':
+        leave.approve(request.user)
+        messages.success(request, 'Leave approved successfully!')
+    else:
+        messages.warning(request, 'Leave cannot be approved.')
+    return redirect('admin_dashboard:leave_list')
+
+
+@login_required
+@user_passes_test(is_admin)
+def leave_reject(request, pk):
+    """Reject a leave"""
+    leave = get_object_or_404(Leave, pk=pk)
+    if leave.status == 'pending':
+        leave.reject(request.user)
+        messages.success(request, 'Leave rejected successfully!')
+        return redirect('admin_dashboard:leave_list')

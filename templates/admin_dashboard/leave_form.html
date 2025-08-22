@@ -1,0 +1,105 @@
+{% extends 'base.html' %} 
+
+{% block title %}{{ title }} - شیفت‌فلو{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">{{ title }}</h1>
+    <p class="text-gray-600">اطلاعات مرخصی را وارد کنید</p>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white rounded-2xl shadow-lg p-8">
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <!-- Employee -->
+      <div>
+        <label for="{{ form.employee.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+          کارمند *
+        </label>
+        {{ form.employee }}
+        {% if form.employee.errors %}
+          <div class="mt-1 text-sm text-red-600">
+            {% for error in form.employee.errors %} {{ error }} {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Date -->
+      <div>
+        <label for="{{ form.date.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+          تاریخ مرخصی *
+        </label>
+        {{ form.date }}
+        {% if form.date.errors %}
+          <div class="mt-1 text-sm text-red-600">
+            {% for error in form.date.errors %} {{ error }} {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Leave Type -->
+      <div>
+        <label for="{{ form.leave_type.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+          نوع مرخصی *
+        </label>
+        {{ form.leave_type }}
+        {% if form.leave_type.errors %}
+          <div class="mt-1 text-sm text-red-600">
+            {% for error in form.leave_type.errors %} {{ error }} {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Reason -->
+      <div>
+        <label for="{{ form.reason.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+          دلیل مرخصی
+        </label>
+        {{ form.reason }}
+        {% if form.reason.errors %}
+          <div class="mt-1 text-sm text-red-600">
+            {% for error in form.reason.errors %} {{ error }} {% endfor %}
+          </div>
+        {% endif %}
+        <p class="mt-1 text-sm text-gray-500">دلیل مرخصی اختیاری است</p>
+      </div>
+
+      <!-- Non-field Errors -->
+      {% if form.non_field_errors %}
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+          <div class="text-sm text-red-600">
+            {% for error in form.non_field_errors %} {{ error }} {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between pt-6">
+        <a href="{% url 'admin_dashboard:leave_list' %}" class="text-gray-600 hover:text-gray-900">
+          انصراف
+        </a>
+        <button type="submit" class="bg-pomodoro-red text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
+          {% if title == 'Create Leave' %}ایجاد مرخصی{% else %}به‌روزرسانی مرخصی{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* Form styling */
+  form input,
+  form select,
+  form textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pomodoro-red focus:border-transparent;
+  }
+
+  form textarea {
+    @apply resize-vertical;
+  }
+</style>
+{% endblock %}

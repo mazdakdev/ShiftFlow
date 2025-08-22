@@ -1,26 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}
-داشبورد مدیر - شیفت‌فلو
-{% endblock %}
+{% block title %}داشبورد مدیر - شیفت‌فلو{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto">
-
   <div class="mb-8">
     <h1 class="text-4xl font-bold text-gray-900 mb-2">داشبورد مدیر</h1>
     <p class="text-lg text-gray-600">مدیریت شیفت‌ها و کارمندان</p>
   </div>
 
   <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <!-- تعداد کارمندان -->
     <div class="bg-white rounded-2xl shadow-lg p-6 border-r-4 border-pomodoro-red">
       <div class="flex items-center">
         <div class="bg-pomodoro-red rounded-full p-3 ml-4">
-         
           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-            </path>
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
         </div>
         <div>
@@ -30,13 +26,13 @@
       </div>
     </div>
 
+    <!-- تعداد شیفت‌ها -->
     <div class="bg-white rounded-2xl shadow-lg p-6 border-r-4 border-pomodoro-blue">
       <div class="flex items-center">
         <div class="bg-pomodoro-blue rounded-full p-3 ml-4">
           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
-            </path>
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
         <div>
@@ -46,13 +42,13 @@
       </div>
     </div>
 
+    <!-- شیفت‌های فعال -->
     <div class="bg-white rounded-2xl shadow-lg p-6 border-r-4 border-pomodoro-green">
       <div class="flex items-center">
         <div class="bg-pomodoro-green rounded-full p-3 ml-4">
           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 10V3L4 14h7v7l9-11h-7z">
-            </path>
+              d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
         </div>
         <div>
@@ -61,105 +57,109 @@
         </div>
       </div>
     </div>
+
+    <!-- مرخصی‌های در انتظار -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 border-r-4 border-yellow-500">
+      <div class="flex items-center">
+        <div class="bg-yellow-500 rounded-full p-3 ml-4">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600">مرخصی‌های در انتظار</p>
+          <p class="text-2xl font-bold text-gray-900">{{ pending_leaves }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- اقدامات سریع -->
   <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
     <h2 class="text-2xl font-bold text-gray-900 mb-6">اقدامات سریع</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <a href="{% url 'admin_dashboard:create_employee_with_user' %}"
-        class="bg-pomodoro-red text-white p-4 rounded-xl text-center hover:bg-red-700 transition-colors">
+      <a href="{% url 'admin_dashboard:create_employee_with_user' %}" class="bg-pomodoro-red text-white p-4 rounded-xl text-center hover:bg-red-700 transition-colors">
         <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
         </svg>
         <p class="font-semibold">افزودن کارمند</p>
       </a>
 
-      <a href="{% url 'admin_dashboard:shift_create' %}"
-        class="bg-pomodoro-blue text-white p-4 rounded-xl text-center hover:bg-blue-700 transition-colors">
+      <a href="{% url 'admin_dashboard:shift_create' %}" class="bg-pomodoro-blue text-white p-4 rounded-xl text-center hover:bg-blue-700 transition-colors">
         <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         <p class="font-semibold">ایجاد شیفت</p>
       </a>
 
-      <a href="{% url 'admin_dashboard:employee_list' %}"
-        class="bg-pomodoro-green text-white p-4 rounded-xl text-center hover:bg-green-700 transition-colors">
+      <a href="{% url 'admin_dashboard:employee_list' %}" class="bg-pomodoro-green text-white p-4 rounded-xl text-center hover:bg-green-700 transition-colors">
         <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-          </path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
         </svg>
         <p class="font-semibold">مشاهده کارمندان</p>
       </a>
 
-      <a href="{% url 'admin_dashboard:shift_list' %}"
-        class="bg-purple-600 text-white p-4 rounded-xl text-center hover:bg-purple-700 transition-colors">
+      <a href="{% url 'admin_dashboard:shift_list' %}" class="bg-purple-600 text-white p-4 rounded-xl text-center hover:bg-purple-700 transition-colors">
         <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
         <p class="font-semibold">مشاهده شیفت‌ها</p>
+      </a>
+
+      <a href="{% url 'admin_dashboard:leave_list' %}" class="bg-yellow-500 text-white p-4 rounded-xl text-center hover:bg-yellow-600 transition-colors">
+        <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+        <p class="font-semibold">مدیریت مرخصی‌ها</p>
       </a>
     </div>
   </div>
 
-
+  <!-- کارمندان اخیر -->
   <div class="grid md:grid-cols-2 gap-8">
-
     <div class="bg-white rounded-2xl shadow-lg p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-bold text-gray-900">کارمندان اخیر</h3>
-        <a href="{% url 'admin_dashboard:employee_list' %}" class="text-pomodoro-red hover:text-red-700 text-sm font-medium">
-          مشاهده همه موارد
-        </a>
+        <a href="{% url 'admin_dashboard:employee_list' %}" class="text-pomodoro-red hover:text-red-700 text-sm font-medium">مشاهده همه موارد</a>
       </div>
       {% if recent_employees %}
-      <div class="space-y-3">
-        {% for employee in recent_employees %}
-        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-          <div>
-            <p class="font-medium text-gray-900">{{ employee.name }}</p>
-            <p class="text-sm text-gray-600">{{ employee.email }}</p>
-          </div>
-          <span class="text-sm text-gray-500">
-            {{ employee.created_at|timesince }} پیش
-          </span>
+        <div class="space-y-3">
+          {% for employee in recent_employees %}
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p class="font-medium text-gray-900">{{ employee.name }}</p>
+                <p class="text-sm text-gray-600">{{ employee.email }}</p>
+              </div>
+              <span class="text-sm text-gray-500">{{ employee.created_at|timesince }} پیش</span>
+            </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
       {% else %}
-      <p class="text-gray-500 text-center py-4">هنوز کارمندی ثبت نشده است</p>
+        <p class="text-gray-500 text-center py-4">هنوز کارمندی ثبت نشده است</p>
       {% endif %}
     </div>
 
-
+    <!-- شیفت‌های اخیر -->
     <div class="bg-white rounded-2xl shadow-lg p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-bold text-gray-900">شیفت‌های اخیر</h3>
-        <a href="{% url 'admin_dashboard:shift_list' %}" class="text-pomodoro-red hover:text-red-700 text-sm font-medium">
-          مشاهده همه موارد
-        </a>
+        <a href="{% url 'admin_dashboard:shift_list' %}" class="text-pomodoro-red hover:text-red-700 text-sm font-medium">مشاهده همه موارد</a>
       </div>
       {% if recent_shifts %}
-      <div class="space-y-3">
-        {% for shift in recent_shifts %}
-        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-          <div>
-            <p class="font-medium text-gray-900">{{ shift.name }}</p>
-            <p class="text-sm text-gray-600">
-              {{ shift.start_time|time:"H:i" }} - {{ shift.end_time|time:"H:i" }}
-            </p>
-          </div>
-          <span class="text-sm text-gray-500">
-            {{ shift.created_at|timesince }} پیش
-          </span>
+        <div class="space-y-3">
+          {% for shift in recent_shifts %}
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p class="font-medium text-gray-900">{{ shift.name }}</p>
+                <p class="text-sm text-gray-600">{{ shift.start_time|time:"H:i" }} - {{ shift.end_time|time:"H:i" }}</p>
+              </div>
+              <span class="text-sm text-gray-500">{{ shift.created_at|timesince }} پیش</span>
+            </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
       {% else %}
-      <p class="text-gray-500 text-center py-4">هنوز شیفتی ثبت نشده است</p>
+        <p class="text-gray-500 text-center py-4">هنوز شیفتی ثبت نشده است</p>
       {% endif %}
     </div>
   </div>

@@ -22,10 +22,16 @@ def employee_dashboard(request):
     current_shift = employee.get_current_shift()
     next_shift = employee.get_next_shift()
     
+    # Check if employee is on leave today
+    is_on_leave = employee.is_on_leave_today()
+    today_leave = employee.get_today_leave() if is_on_leave else None
+    
     context = {
         'employee': employee,
         'current_shift': current_shift,
         'next_shift': next_shift,
+        'is_on_leave': is_on_leave,
+        'today_leave': today_leave,
         'now': timezone.now(),
     }
     return render(request, 'core/employee_dashboard.html', context)
